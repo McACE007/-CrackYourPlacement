@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int trap(vector<int>& nums) {
+        int n = nums.size();
+        int l = 0, r = n - 1, lMax = nums[l], rMax = nums[r];
+        int totalWater = 0;
+        while(l < r){
+            if(lMax < rMax){
+                l++;
+                lMax = max(nums[l], lMax);
+                totalWater += lMax - nums[l]; 
+            }else{
+                r--;
+                rMax = max(nums[r], rMax);
+                totalWater += rMax - nums[r]; 
+            }
+        }
+
+        return totalWater;
+    }
+};
