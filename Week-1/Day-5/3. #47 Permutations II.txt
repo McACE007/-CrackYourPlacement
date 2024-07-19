@@ -1,0 +1,29 @@
+class Solution {
+public:
+
+    vector<vector<int>> finalAns;
+  
+    void helper(vector<int> &arr ,int n, int index){
+        if(index == n - 1){
+            finalAns.push_back(arr);
+            return;
+        }
+        
+        unordered_set<int> uset;
+        
+        for(int i = index; i < n; i++){
+            if(uset.find(arr[i]) != uset.end()) continue;
+            
+            uset.insert(arr[i]);
+            swap(arr[i], arr[index]);
+            helper(arr, n, index + 1);
+            swap(arr[i], arr[index]);
+        }
+    }
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        int n = nums.size();
+        helper(nums, n, 0);
+        return finalAns;
+    }
+};
