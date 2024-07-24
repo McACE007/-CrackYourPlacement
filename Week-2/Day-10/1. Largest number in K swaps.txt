@@ -1,0 +1,32 @@
+class Solution
+{
+    public:
+    
+    void helper(string& str, int k, int idx, int n, string& ans){
+        
+        if(k == 0 || idx == n-1){
+            return;
+        }
+        
+        char maxChar = *max_element(str.begin()+idx+1, str.end());
+        
+        if(str[idx] < maxChar)
+            for(int i = idx + 1; i < n; i++){
+                if(str[i] == maxChar){
+                    swap(str[i], str[idx]);
+                    if(str.compare(ans) > 0)
+                        ans = str;
+                    helper(str, k-1, idx+1, n, ans);
+                    swap(str[i], str[idx]);
+                }
+            }
+        helper(str, k, idx+1, n, ans);
+    }
+    
+    string findMaximumNum(string str, int k){
+        int n = str.size();
+        string ans(str);
+        helper(str, k, 0, n, ans);
+        return ans;
+    }
+};

@@ -1,0 +1,42 @@
+class Choice {
+    public:
+        char dName;
+        int dx;
+        int dy;
+};
+
+class Solution {
+  public:
+    vector<Choice> choices = {{'U', -1, 0}, {'D', 1, 0}, {'L', 0, -1}, {'R', 0, 1}};
+    vector<string> finalAns;
+    
+    void helper(vector<vector<int>> &mat, int x, int y, int n, string path){
+        if(x == n - 1 && y == n - 1){
+            finalAns.push_back(path);
+            return;
+        }
+        
+        for(auto choice : choices){
+            int newDx = x + choice.dx;
+            int newDy = y + choice.dy;
+            
+            if(newDx >= 0 && newDx < n && newDy >= 0 && newDy < n && mat[newDx][newDy] == 1){
+                path.push_back(choice.dName);
+                mat[newDx][newDy] = 0;
+                helper(mat, newDx, newDy, n, path);
+                mat[newDx][newDy] = 1;
+                path.pop_back();
+            }
+        }
+        
+    }
+    
+    vector<string> findPath(vector<vector<int>> &mat) {
+        int n = mat.size();
+        if(mat[0][0] == 1){
+            mat[0][0] = 0;
+            helper(mat, 0, 0, n, "");
+        }
+        return finalAns;
+    }
+};
