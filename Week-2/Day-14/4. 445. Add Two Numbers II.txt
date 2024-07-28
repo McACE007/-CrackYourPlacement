@@ -1,0 +1,51 @@
+class Solution {
+public:
+
+    ListNode* addPaddingToStart(ListNode* head, int paddingSize) {
+        for(int i = 0; i < paddingSize; i++){
+            ListNode* padding = new ListNode(0, head);
+            head = padding;
+        }
+        return head;
+    }
+
+    int getLength(ListNode* head){
+        int count = 0;
+        ListNode* curr = head;
+
+        while(curr != NULL){
+            count++;
+            curr = curr->next;
+        }
+        return count;
+    }
+
+    pair<ListNode*, int> sum(ListNode* l1, ListNode* l2){
+        if(l1 == NULL)
+            return {NULL, 0};
+        pair<ListNode*, int> nextSum = sum(l1->next, l2->next);
+        ListNode* nextNode = nextSum.first;
+        int carry = nextSum.second;
+        int curr_sum = l1->val + l2->val + carry;
+        int digit = curr_sum % 10;
+        int curr_carry = curr_sum / 10;
+        ListNode* currNode = new ListNode(digit, nextNode);
+        return {currNode, curr_carry};
+    }
+    
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int diff = getLength(l1) - getLength(l2);
+        if(diff < 0)
+            return addTwoNumbers(l2, l1);
+
+        l2 = addPaddingToStart(l2, diff);
+
+        pair<ListNode*, int> result = sum(l1, l2);
+
+        if(result.second > 0){
+            ListNode* newHead = new ListNode(result.second, result.first);
+            result.first = newHead;
+        }
+        return result.first;
+    };
+};
