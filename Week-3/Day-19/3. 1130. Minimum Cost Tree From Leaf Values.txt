@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& ar) {
+        stack<int> st;
+        int total_cost = 0;
+        
+        for (int value : ar) {
+            while (!st.empty() && st.top() <= value) {
+                int mid = st.top();
+                st.pop();
+                if (st.empty()) {
+                    total_cost += mid * value;
+                } else {
+                    total_cost += mid * min(st.top(), value);
+                }
+            }
+            st.push(value);
+        }
+        
+        while (st.size() > 1) {
+            int mid = st.top();
+            st.pop();
+            total_cost += mid * st.top();
+        }
+        
+        return total_cost;
+    }
+};
+
