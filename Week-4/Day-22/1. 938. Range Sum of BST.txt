@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int rangeSumBST(TreeNode* root, int L, int R) {
+        int rangeSum = 0;  
+        stack<TreeNode*> st; 
+        st.push(root);  
+        
+        while (!st.empty()) {
+            TreeNode* node = st.top(); 
+            st.pop();
+
+            if (node->val >= L && node->val <= R) {
+                rangeSum += node->val;
+            }
+
+            if (node->val > L && node->left) {
+                st.push(node->left);
+            }
+
+            if (node->val < R && node->right) {
+                st.push(node->right);
+            }
+        }
+        return rangeSum; 
+    }
+};
+
