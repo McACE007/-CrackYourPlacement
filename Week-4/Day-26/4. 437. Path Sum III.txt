@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        unordered_map<long long, int> prefixSumCount;
+        prefixSumCount[0] = 1;  
+        return dfs(root, sum, 0, prefixSumCount);
+    }
+
+private:
+    int dfs(TreeNode* node, int target, long long currentSum, unordered_map<long long, int>& prefixSumCount) {
+        if (!node) return 0;
+
+        currentSum += node->val;
+        int count = prefixSumCount[currentSum - target];
+        
+        prefixSumCount[currentSum]++;
+        
+        count += dfs(node->left, target, currentSum, prefixSumCount);
+        count += dfs(node->right, target, currentSum, prefixSumCount);
+        
+        prefixSumCount[currentSum]--;
+        
+        return count;
+    }
+};
+
