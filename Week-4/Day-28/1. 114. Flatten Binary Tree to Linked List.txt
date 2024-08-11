@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if (root == NULL) 
+            return;
+        flatten(root->left);
+        flatten(root->right);
+
+        TreeNode* rightSubtree = root->right;
+
+        root->right = root->left;
+        root->left = NULL;
+
+        TreeNode* current = root;
+        while (current->right != NULL) 
+            current = current->right;
+
+        current->right = rightSubtree;
+    }
+};
+
