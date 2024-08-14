@@ -1,0 +1,31 @@
+class Solution {
+  public:
+    pair<Node*, Node*> convertToDLL(Node* root) {
+        if (!root) return {nullptr, nullptr};
+        if (!root->left && !root->right) {
+            return {root, root};
+        }
+        
+        pair<Node*, Node*> leftDLL = convertToDLL(root->left);
+        pair<Node*, Node*> rightDLL = convertToDLL(root->right);
+        
+        root->right = rightDLL.first;
+        if (rightDLL.first) {
+            rightDLL.first->left = root;
+        }
+        
+        root->left = leftDLL.second;
+        if (leftDLL.second) {
+            leftDLL.second->right = root;
+        }
+        
+        if (!leftDLL.first) leftDLL.first = root;
+        if (!rightDLL.second) rightDLL.second = root;
+        
+        return {leftDLL.first, rightDLL.second};
+    }
+
+    Node* bToDLL(Node* root) {   
+        return convertToDLL(root).first;
+    }
+};

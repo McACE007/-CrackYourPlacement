@@ -1,0 +1,20 @@
+class Solution {
+  public:
+    Node *helper(int pre[], int &n, int &index, int l, int h) {
+        if (index >= n) return NULL;
+        
+        if (pre[index] < l || pre[index] > h) return NULL;
+
+        Node *root = newNode(pre[index++]);
+        root->left = helper(pre, n, index, l, root->data);
+        root->right = helper(pre, n, index, root->data, h);
+
+        return root;
+    }
+
+    Node* Bst(int pre[], int n) {
+        if (n == 0) return NULL;
+        int index = 0;
+        return helper(pre, n, index, INT_MIN, INT_MAX);
+    }
+};

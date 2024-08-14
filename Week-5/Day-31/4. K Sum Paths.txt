@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    void solve(Node *root, int k, unordered_map<int, int> &mp, int &count, int currentSum) {
+        if (root == nullptr) {
+            return;
+        }
+
+        currentSum += root->data;
+        
+        if (mp.find(currentSum - k) != mp.end()) {
+            count += mp[currentSum - k];
+        }
+        
+        mp[currentSum]++;
+        
+        solve(root->left, k, mp, count, currentSum);
+        solve(root->right, k, mp, count, currentSum);
+        
+        mp[currentSum]--;
+    }
+
+    int sumK(Node *root, int k) {
+        int count = 0;
+        unordered_map<int, int> mp;
+        
+        mp[0] = 1;
+        
+        solve(root, k, mp, count, 0);
+        
+        return count;
+    }
+};
