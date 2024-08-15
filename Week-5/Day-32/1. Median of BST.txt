@@ -1,0 +1,35 @@
+    int countNodes(Node* root) {
+        if (!root) return 0;
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+    void findMedianUtil(Node* root, Node*& prev, Node*& curr, int& count, int target) {
+        if (!root) return;
+
+        findMedianUtil(root->left, prev, curr, count, target);
+
+        count++;
+
+        if (count == target) prev = root;
+        if (count == target + 1) curr = root;
+
+        findMedianUtil(root->right, prev, curr, count, target);
+    }
+
+    float findMedian(Node* root) {
+        if (!root) return 0.0;
+
+        int n = countNodes(root);
+
+        Node* prev = nullptr;
+        Node* curr = nullptr;
+        int count = 0;
+
+        if (n % 2 == 1) {
+            findMedianUtil(root, prev, curr, count, n / 2 + 1);
+            return prev->data;
+        } else {
+            findMedianUtil(root, prev, curr, count, n / 2);
+            return (prev->data + curr->data) / 2.0;
+        }
+    }

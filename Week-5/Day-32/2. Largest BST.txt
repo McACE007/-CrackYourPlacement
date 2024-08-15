@@ -1,0 +1,32 @@
+class Solution{
+    public:
+    
+    int ans = 0;
+    
+    vector<int> solve(Node* root) {
+        if (!root) return {0, INT_MAX, INT_MIN};
+        
+        vector<int> left = solve(root->left);
+        vector<int> right = solve(root->right);
+        
+        if (left[0] >= 0 && right[0] >= 0) {
+            if (root->left && root->data <= left[2]) return {-1, -1, -1};
+            if (root->right && root->data >= right[1]) return {-1, -1, -1};
+            
+            int minVal = min(left[1], root->data);
+            int maxVal = max(right[2], root->data);
+            
+            int size = left[0] + right[0] + 1;
+            ans = max(ans, size);  
+            
+            return {size, minVal, maxVal};
+        }
+        
+        return {-1, -1, -1};
+    }
+    
+    int largestBst(Node *root) {
+        solve(root);
+        return ans;
+    }
+};
