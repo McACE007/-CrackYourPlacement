@@ -1,0 +1,45 @@
+class Solution 
+{
+    public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+        queue<tuple<int, int, int>> q;  
+        int freshCount = 0;
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (grid[i][j] == 2) {
+                    q.push(make_tuple(i, j, 0));  
+                } else if (grid[i][j] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+
+        if (freshCount == 0) return 0;
+
+        int time = 0;
+        vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        while (!q.empty()) {
+            tuple<int, int, int> current = q.front();
+            q.pop();
+            int x = get<0>(current);
+            int y = get<1>(current);
+            int currentTime = get<2>(current);
+            
+            for (auto& dir : directions) {
+                int nx = x + dir.first;
+                int ny = y + dir.second;
+                if (nx >= 0 && ny >= 0 && nx < rows && ny < cols && grid[nx][ny] == 1) {
+                    grid[nx][ny] = 2;  
+                    q.push(make_tuple(nx, ny, currentTime + 1)); 
+                    freshCount--;  
+                    time = currentTime + 1;
+                }
+            }
+        }
+
+        return (freshCount == 0) ? time : -1;
+    }
+};
