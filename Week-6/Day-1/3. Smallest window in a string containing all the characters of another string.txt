@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string smallestWindow(string s, string p) {
+        if(p.length() > s.length()) return "-1";
+
+        vector<int> pFreq(256, 0), sFreq(256, 0);
+        
+        for(char c : p) pFreq[c]++;
+        
+        int minLength = INT_MAX, start = 0, count = 0;
+        int startIndex = -1;
+        
+        for(int end = 0; end < s.length(); end++) {
+            sFreq[s[end]]++;
+            
+            if(pFreq[s[end]] != 0 && sFreq[s[end]] <= pFreq[s[end]]) 
+                count++;
+            
+            if(count == p.length()) {
+                while(sFreq[s[start]] > pFreq[s[start]] || pFreq[s[start]] == 0) {
+                    if(sFreq[s[start]] > pFreq[s[start]]) 
+                        sFreq[s[start]]--;
+                    start++;
+                }
+                
+                int windowLength = end - start + 1;
+                if(minLength > windowLength) {
+                    minLength = windowLength;
+                    startIndex = start;
+                }
+            }
+        }
+        
+        return (startIndex == -1) ? "-1" : s.substr(startIndex, minLength);
+    }
+};
