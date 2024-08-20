@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        int i = 0, n = s.size();
+        
+        while (i < n && s[i] == ' ') i++;
+        
+        if (i < n && (s[i] == '+' || s[i] == '-')) i++;
+        
+        bool isNumeric = false;
+        bool hasDot = false, hasExp = false;
+        
+        while (i < n) {
+            char c = s[i];
+            
+            if (c >= '0' && c <= '9') {
+                isNumeric = true; 
+            } 
+            else if (c == '.') {
+                if (hasDot || hasExp) return false; 
+                hasDot = true;
+            } 
+            else if (c == 'e' || c == 'E') {
+                if (!isNumeric || hasExp) return false;
+                hasExp = true;
+                isNumeric = false; 
+            } 
+            else if (c == '+' || c == '-') {
+                if (s[i-1] != 'e' && s[i-1] != 'E') return false; 
+            } 
+            else {
+                break; 
+            }
+            
+            i++;
+        }
+        
+        while (i < n && s[i] == ' ') i++;
+        
+        return isNumeric && i == n; 
+    }
+};
+
