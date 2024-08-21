@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> result;
+        int n = words.size();
+        int begin = 0, currentLength = 0;
+
+        for (int i = 0; i < n; ++i) {
+            if (currentLength + words[i].size() + (i - begin) > maxWidth) {
+                result.emplace_back(formatLine(words, maxWidth, begin, i, currentLength, false));
+                begin = i;
+                currentLength = 0;
+            }
+            currentLength += words[i].size();
+        }
+
+        result.emplace_back(formatLine(words, maxWidth, begin, n, currentLength, true));
+
+        return result;
+    }
+
+private:
+    string formatLine(const vector<string>& words, int maxWidth, int begin, int end, int currentLength, bool isLastLine) {
+        string line;
+        int numberOfWords = end - begin;
+        
+        for (int i = 0; i < numberOfWords; ++i) {
+            line += words[begin + i];
+            if (i < numberOfWords - 1) {
+                addSpaces(line, numberOfWords - 1, maxWidth - currentLength, isLastLine, i);
+            }
+        }
+
+        while (line.size() < maxWidth) {
+            line += ' ';
+        }
+
+        return line;
+    }
+
+    void addSpaces(string& line, int totalSlots, int totalSpaces, bool isLastLine, int slotIndex) {
+        if (isLastLine) {
+            line += ' ';
+        } else {
+            int spaces = totalSpaces / totalSlots;
+            if (slotIndex < totalSpaces % totalSlots) {
+                spaces += 1;
+            }
+            line.append(spaces, ' ');
+        }
+    }
+};
+

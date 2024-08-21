@@ -1,0 +1,39 @@
+void buildBadMatchTable(int badMatch[], const string &p) {
+    int m = p.size();
+    
+    fill(badMatch, badMatch + 256, -1);
+    
+    for (int i = 0; i < m; i++) {
+        badMatch[(int)p[i]] = i;
+    }
+}
+
+bool boyerMooreSearch(const string &s, const string &p) {
+    int n = s.size();
+    int m = p.size();
+    int badMatch[256];
+    
+    buildBadMatchTable(badMatch, p);
+    
+    int shift = 0;
+    while (shift <= (n - m)) {
+        int j = m - 1;
+        
+        while (j >= 0 && s[shift + j] == p[j]) {
+            j--;
+        }
+        
+        if (j < 0) {
+            return true;
+        } else {
+            shift += max(1, j - badMatch[(int)s[shift + j]]);
+        }
+    }
+    
+    return false;
+}
+
+bool searchPattern(string str, string pat) {
+    return boyerMooreSearch(str, pat);
+}
+
