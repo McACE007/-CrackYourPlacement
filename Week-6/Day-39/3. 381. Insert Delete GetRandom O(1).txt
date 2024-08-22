@@ -1,0 +1,32 @@
+class RandomizedCollection {
+public:
+    vector<pair<int, int>> elements;
+    unordered_map<int, vector<int>> indices;
+
+    RandomizedCollection() {}
+
+    bool insert(int val) {
+        bool not_present = indices[val].empty();
+        indices[val].push_back(elements.size());
+        elements.push_back({val, indices[val].size() - 1});
+        return not_present;
+    }
+
+    bool remove(int val) {
+        if (indices[val].empty()) return false;
+
+        auto last = elements.back();
+        indices[last.first][last.second] = indices[val].back();
+        elements[indices[val].back()] = last;
+
+        indices[val].pop_back();
+        if (indices[val].empty()) indices.erase(val);
+        elements.pop_back();
+
+        return true;
+    }
+
+    int getRandom() {
+        return elements[rand() % elements.size()].first;
+    }
+};
