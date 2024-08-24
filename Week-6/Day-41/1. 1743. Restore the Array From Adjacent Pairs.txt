@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<int> restoreArray(std::vector<std::vector<int>>& vals) {
+        unordered_map<int, vector<int>> adj;
+        
+        for (const auto& pair : vals) {
+            adj[pair[0]].push_back(pair[1]);
+            adj[pair[1]].push_back(pair[0]);
+        }
+        
+        int start = 0;
+        for (const auto& [key, neighbors] : adj) {
+            if (neighbors.size() == 1) {
+                start = key;
+                break;
+            }
+        }
+        
+        vector<int> result;
+        unordered_set<int> visited;
+        dfs(start, adj, visited, result);
+        return result;
+    }
+    
+private:
+    void dfs(int node, unordered_map<int, vector<int>>& adj, unordered_set<int>& visited, vector<int>& result) {
+        result.push_back(node);
+        visited.insert(node);
+        
+        for (int neighbor : adj[node]) {
+            if (!visited.count(neighbor)) {
+                dfs(neighbor, adj, visited, result);
+            }
+        }
+    }
+};

@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        int freq[26] = {0};
+        for(char task : tasks) {
+            freq[task - 'A']++;
+        }
+
+        int maxFreq = *max_element(begin(freq), end(freq));
+        int maxCount = count(begin(freq), end(freq), maxFreq);
+        
+        int result = max((int)tasks.size(), (maxFreq - 1) * (n + 1) + maxCount);
+        return result;
+    }
+};
