@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int countArrangement(int N) {
+        vector<bool> visited(N + 1, false);
+        return helper(N, 1, visited);
+    }
+    
+private:
+    int helper(int N, int pos, vector<bool>& visited) {
+        if (pos > N) return 1;
+        
+        int count = 0;
+        for (int i = 1; i <= N; ++i) {
+            if (!visited[i] && (i % pos == 0 || pos % i == 0)) {
+                visited[i] = true;
+                count += helper(N, pos + 1, visited);
+                visited[i] = false;
+            }
+        }
+        
+        return count;
+    }
+};

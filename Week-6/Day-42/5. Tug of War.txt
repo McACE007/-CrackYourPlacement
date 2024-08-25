@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+void tugOfWar(int *arr, int n) {
+    int sum = accumulate(arr, arr + n, 0);
+    int half = sum / 2;
+
+    vector<vector<bool>> dp(n + 1, vector<bool>(half + 1, false));
+    dp[0][0] = true;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = half; j >= arr[i - 1]; j--) {
+            dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
+        }
+    }
+
+    int min_diff = INT_MAX;
+    int s1 = 0;
+
+    for (int i = half; i >= 0; i--) {
+        if (dp[n][i]) {
+            s1 = i;
+            break;
+        }
+    }
+
+    int s2 = sum - s1;
+    cout << "Minimum Difference: " << abs(s2 - s1) << endl;
+
+    vector<int> subset1, subset2;
+    int w = s1;
+
+    for (int i = n; i > 0; i--) {
+        if (w >= arr[i - 1] && dp[i - 1][w - arr[i - 1]]) {
+            subset1.push_back(arr[i - 1]);
+            w -= arr[i - 1];
+        } else {
+            subset2.push_back(arr[i - 1]);
+        }
+    }
+
+    cout << "The first subset is: ";
+    for (int x : subset1) cout << x << " ";
+    cout << "\nThe second subset is: ";
+    for (int x : subset2) cout << x << " ";
+}
+

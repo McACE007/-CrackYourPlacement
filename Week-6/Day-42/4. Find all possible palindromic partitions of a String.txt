@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<vector<string>> allPalindromicPerms(string s) {
+        vector<vector<string>> result;
+        vector<string> current;
+        unordered_map<string, bool> memo; // Memoization map
+        backtrack(s, 0, current, result, memo);
+        return result;
+    }
+
+private:
+    bool isPalindrome(string &s, int start, int end, unordered_map<string, bool> &memo) {
+        string substr = s.substr(start, end - start + 1);
+        if (memo.find(substr) != memo.end()) return memo[substr];
+
+        while (start < end) {
+            if (s[start] != s[end]) return memo[substr] = false;
+            start++;
+            end--;
+        }
+        return memo[substr] = true;
+    }
+
+    void backtrack(string &s, int index, vector<string> &current, vector<vector<string>> &result, unordered_map<string, bool> &memo) {
+        if (index == s.size()) {
+            result.push_back(current);
+            return;
+        }
+
+        for (int i = index; i < s.size(); i++) {
+            if (isPalindrome(s, index, i, memo)) {
+                current.push_back(s.substr(index, i - index + 1));
+                backtrack(s, i + 1, current, result, memo);
+                current.pop_back();
+            }
+        }
+    }
+};
