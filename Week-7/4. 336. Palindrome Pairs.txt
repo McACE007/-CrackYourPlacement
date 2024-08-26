@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        unordered_map<string, int> wordMap;
+        vector<vector<int>> result;
+        int n = words.size();
+        
+        for (int i = 0; i < n; ++i) {
+            wordMap[words[i]] = i;
+        }
+        
+        auto isPalindrome = [](const string& s) {
+            int left = 0, right = s.size() - 1;
+            while (left < right) {
+                if (s[left++] != s[right--]) return false;
+            }
+            return true;
+        };
+        
+        for (int i = 0; i < n; ++i) {
+            string word = words[i];
+            int length = word.size();
+            
+            for (int j = 0; j <= length; ++j) {
+                string left = word.substr(0, j);
+                string right = word.substr(j);
+                
+                if (isPalindrome(left)) {
+                    string reversedRight = right;
+                    reverse(reversedRight.begin(), reversedRight.end());
+                    if (wordMap.find(reversedRight) != wordMap.end() && wordMap[reversedRight] != i) {
+                        result.push_back({wordMap[reversedRight], i});
+                    }
+                }
+                
+                if (j != length && isPalindrome(right)) {
+                    string reversedLeft = left;
+                    reverse(reversedLeft.begin(), reversedLeft.end());
+                    if (wordMap.find(reversedLeft) != wordMap.end() && wordMap[reversedLeft] != i) {
+                        result.push_back({i, wordMap[reversedLeft]});
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
+

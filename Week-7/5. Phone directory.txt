@@ -1,0 +1,51 @@
+struct TrieNode {
+    unordered_map<char, TrieNode*> children;
+    vector<string> words;
+};
+
+class Solution {
+public:
+    TrieNode* root;
+    
+    Solution() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            if (node->children.find(c) == node->children.end()) {
+                node->children[c] = new TrieNode();
+            }
+            node = node->children[c];
+            node->words.push_back(word);
+        }
+    }
+    
+    vector<vector<string>> displayContacts(int n, string contact[], string s) {
+        for (int i = 0; i < n; ++i) {
+            insert(contact[i]);
+        }
+        
+        vector<vector<string>> result;
+        TrieNode* node = root;
+        
+        string prefix = "";
+        for (char c : s) {
+            prefix += c;
+            if (node->children.find(c) == node->children.end()) {
+                result.push_back({"0"});
+                node = new TrieNode();
+            } else {
+                node = node->children[c];
+                result.push_back(node->words);
+            }
+        }
+        
+        while (result.size() < s.size()) {
+            result.push_back({"0"});
+        }
+        
+        return result;
+    }
+};
