@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<vector<int>> adj(n);
+
+        for (int i = 0; i < manager.size(); i++) {
+            if(manager[i] != -1)
+                adj[manager[i]].push_back(i);
+        }
+
+        queue<pair<int, int>> q;
+        q.push({headID, 0});
+
+        int maxTime = 0;
+
+        while (!q.empty()) {
+            int v = q.front().first;
+            int time = q.front().second;
+            q.pop();
+
+            maxTime = max(maxTime, time);
+
+            for(int &emp: adj[v]) {
+                q.push({emp, time + informTime[v]});
+            }
+        }
+
+        return maxTime;
+    }
+};
